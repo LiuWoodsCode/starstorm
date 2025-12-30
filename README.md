@@ -120,7 +120,7 @@ sudo apt-get update
 sudo apt-get install python3-pyqt6 python3-pip
 
 # Fedora:
-sudo dnf install python3-qt6 python3-pip
+sudo dnf install python3-pyqt6 python3-pip
 
 # Arch:
 sudo pacman -S python-pyqt6 python-pip
