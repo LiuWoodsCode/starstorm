@@ -6,6 +6,8 @@ A sleek, console-style application launcher for Windows and Linux with gamepad s
 ![Python](https://img.shields.io/badge/Python-3.8%2B-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
+<a href='https://ko-fi.com/W7W41RFDX2' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 ## ✨ Features
 
 ### 🎨 Beautiful Interface
