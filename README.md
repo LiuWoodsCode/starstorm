@@ -283,36 +283,6 @@ Press `S` or `Start` button to access:
 - App count
 - GitHub update checker
 
-### Using Settings Menu
-
-Press `S` or `Start` button to access:
-
-**🎮 Quick Actions:**
-- API Key management
-- Program scanner
-- Add/Edit apps
-- Download covers
-- Set background
-
-**🎨 Appearance:**
-- Toggle clock visibility
-- (More options coming soon)
-
-**⚡ Behavior:**
-- Sound effects toggle
-- Fullscreen mode toggle
-
-**🔧 Advanced:**
-- 🎮 Key Remapper - Customize all controls
-- 💾 Backup Config - Export your setup
-- 📥 Restore Config - Import saved setup
-- 🔄 Reset Settings - Soft or Full reset
-
-**ℹ️ Information:**
-- Version number
-- App count
-- GitHub update checker
-
 ### Using Quick Search
 
 1. Press `F` (keyboard) or `LB` (gamepad) anywhere
