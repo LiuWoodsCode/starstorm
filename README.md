@@ -34,25 +34,33 @@ A sleek, console-style application launcher for Windows and Linux with gamepad s
 
 ## 📸 Screenshots
 
-<img width="1920" height="1080" alt="Screenshot (287)" src="https://github.com/user-attachments/assets/7852122d-ed4b-46cb-bc77-3ef451de2848" />
+<img width="1920" height="1080" alt="Screenshot (305)" src="https://github.com/user-attachments/assets/912fc172-427e-41c0-a043-c728a255b7ce" />
+
 
 *Carousel view with cover art*
 
-<img width="1920" height="1080" alt="Screenshot (288)" src="https://github.com/user-attachments/assets/4424c77c-7b4b-44f7-8252-d4e3a2673ae1" />
+<img width="1920" height="1080" alt="Screenshot (301)" src="https://github.com/user-attachments/assets/f7bbd689-0bbd-4963-b040-36d5eb6665c1" />
+
 
 *System Menu*
 
-<img width="1920" height="1080" alt="Screenshot (290)" src="https://github.com/user-attachments/assets/e04e488c-6404-4b1f-8488-6c8b80d5848b" />
+<img width="1920" height="1080" alt="Screenshot (303)" src="https://github.com/user-attachments/assets/cba6c06e-c600-4c5f-b55f-c30a672c7319" />
+
 
 *Quick Search feature*
 
 
-<img width="1920" height="1080" alt="Screenshot (289)" src="https://github.com/user-attachments/assets/1601e609-53c6-4e23-b381-f1d6df89017e" />
+<img width="1920" height="1080" alt="Screenshot (302)" src="https://github.com/user-attachments/assets/5d65517b-b4c4-40dc-a1c6-c09247486ec5" />
+
 
 *Key Remapper*
 
 
-https://github.com/user-attachments/assets/2388702e-ab89-4c6f-b263-d25102cec5fb
+
+https://github.com/user-attachments/assets/9b5a56f2-09a0-4c7f-829d-2a1907c9bc80
+
+
+
 
 *In motion*
 
