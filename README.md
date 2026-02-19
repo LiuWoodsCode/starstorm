@@ -173,7 +173,7 @@ pip install -r requirements.txt
 #Run the launcher
 python TvLauncher_Windows.py
 
-#Alternatively you can just run the installer.bat and let it do everything for you
+#Alternatively you can just run the Installer.bat and let it do everything for you
 #(creates a virtual environment,activates it,installs dependencies)
 #Once everything is installed simply run the launcher with the given TVLauncher.bat file
 #it will automatically activate the virtual environment and run the launcher with 1 click
@@ -196,17 +196,17 @@ pip install -r requirements.txt
 # Run the launcher 
 python3 TvLauncher_Linux.py
 
-#Alternatively you can just run the installer.sh and let it do everything for you
+#Alternatively you can just run the Installer.sh and let it do everything for you
 #(creates a virtual environment,activates it,installs dependencies)
-#Once everything is installed simply run the launcher with the given launcher.sh file
+#Once everything is installed simply run the launcher with the given Launcher.sh file
 #it will automatically activate the virtual environment and run the launcher with 1 click
 
 #sh files are already executable but if they are not just do
-chmod +x installer.sh
-./installer.sh
+chmod +x Installer.sh
+./Installer.sh
 
-chmod +x launcher.sh
-./launcher.sh
+chmod +x Launcher.sh
+./Launcher.sh
 
 #you can also edit the given .desktop so you are able to run the launcher no matter where it is placed.
 
@@ -228,7 +228,7 @@ Just extract and run:
 TVLauncher Linux v0.9 Portable.tar.gz
 
 # Run
-./launcher.sh
+./Launcher.sh
 
 or edit the .desktop file
 ```
