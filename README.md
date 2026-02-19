@@ -41,8 +41,9 @@ A sleek, console-style application launcher for Windows and Linux with gamepad s
 
 *Carousel view with cover art*
 
+<img width="1920" height="1080" alt="Screenshot (331)" src="https://github.com/user-attachments/assets/f38a5a78-982f-4cac-ac5c-a5f61894ca3a" />
 
-<img width="1920" height="1080" alt="Screenshot (313)" src="https://github.com/user-attachments/assets/85657856-b507-4b95-897e-261f4e26b290" />
+
 
 
 *System Menu*
