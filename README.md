@@ -3,12 +3,6 @@
 A sleek, console-style application launcher for Windows and Linux with gamepad support, automatic image fetching, and powerful organization features.
 
 <p align="center">
-  <a href='https://ko-fi.com/W7W41RFDX2' target='_blank'>
-    <img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' />
-  </a>
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Platform">
   <img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
