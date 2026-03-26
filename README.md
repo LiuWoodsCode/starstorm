@@ -108,12 +108,11 @@ https://github.com/user-attachments/assets/09108e93-de59-4919-a60f-eb129cec89bc
 
 
  ### New in Version 1.1
- 
 - **Fixed**
    - Flatpak binary path (/usr/bin/flatpak) was incorrectly treated as a valid icon,
      preventing cover download from SteamGridDB on some Linux distributions (e.g. Kubuntu).
+   
   
-    
    ## Requirements
 
 - **Operating System:** Windows 10/11 or Linux (Ubuntu 20.04+, Fedora, Arch, etc.)
@@ -151,7 +150,7 @@ pip install -r requirements.txt
 #Run the launcher
 python TvLauncher_Windows.py
 
-#Alternatively you can just run the Installer.bat and let it do everything for you
+#Alternatively you can just run the installer.bat and let it do everything for you
 #(creates a virtual environment,activates it,installs dependencies)
 #Once everything is installed simply run the launcher with the given TVLauncher.bat file
 #it will automatically activate the virtual environment and run the launcher with 1 click
@@ -180,11 +179,11 @@ python3 TvLauncher_Linux.py
 #it will automatically activate the virtual environment and run the launcher with 1 click
 
 #sh files are already executable but if they are not just do
-chmod +x Installer.sh
-./Installer.sh
+chmod +x installer.sh
+./installer.sh
 
-chmod +x Launcher.sh
-./Launcher.sh
+chmod +x launcher.sh
+./launcher.sh
 
 #you can also edit the given .desktop so you are able to run the launcher no matter where it is placed.
 
@@ -203,10 +202,10 @@ This version includes everything needed:
 Just extract and run:
 ```bash
 # Extract
-TVLauncher Linux v0.9 Portable.tar.gz
+TVLauncher Linux v1.1 Portable.tar.gz
 
 # Run
-./Launcher.sh
+./launcher.sh
 
 or edit the .desktop file
 ```
