@@ -1261,7 +1261,7 @@ class SettingsMenu(QWidget):
     def _open_github(self):
         """Apre la pagina GitHub del progetto"""
         import webbrowser
-        github_url = "https://github.com/Darkvinx88/TvLauncher"
+        github_url = "https://github.com/LiuWoodsCode/starstorm"
         
         try:
             webbrowser.open(github_url)
