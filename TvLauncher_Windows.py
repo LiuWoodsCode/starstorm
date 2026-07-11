@@ -786,9 +786,9 @@ class TVLauncher(QMainWindow):
         # App tiles are displayed in a scrollable grid.  Keep the historical
         # ``carousel_container`` name so integrations can continue to target
         # the app area without knowing about this implementation detail.
-        self.grid_columns = 4
-        self.tile_spacing = self.scaling.scale(17)
-        self.grid_margin = self.scaling.scale(16)
+        self.grid_columns = 6
+        self.tile_spacing = self.scaling.scale(8)
+        self.grid_margin = self.scaling.scale(0)
         self.grid_content_width = (
             self.grid_columns * self.focused_width
             + (self.grid_columns - 1) * self.tile_spacing
