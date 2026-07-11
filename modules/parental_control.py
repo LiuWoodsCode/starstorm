@@ -5,13 +5,13 @@ import hashlib
 import secrets
 from pathlib import Path
 
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel,
     QPushButton, QWidget, QLineEdit, QComboBox,
     QApplication,
 )
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal
-from PyQt6.QtGui import QFont, QColor, QKeyEvent, QPainter, QBrush
+from PySide6.QtCore import Qt, QTimer, Signal
+from PySide6.QtGui import QFont, QColor, QKeyEvent, QPainter, QBrush
 
 
 PIN_LENGTH = 4
@@ -97,9 +97,9 @@ def _numpad_btn_style(size: int, font_size: int, mode="normal") -> str:
 
 
 class NumPadWidget(QWidget):
-    digit_entered = pyqtSignal(str)
-    backspace     = pyqtSignal()
-    confirmed     = pyqtSignal()
+    digit_entered = Signal(str)
+    backspace     = Signal()
+    confirmed     = Signal()
     LAYOUT = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["⌫", "0", "OK"]]
 
     def __init__(self, scaling, parent=None):

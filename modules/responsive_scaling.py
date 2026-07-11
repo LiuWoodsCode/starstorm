@@ -3,7 +3,7 @@ Responsive Scaling Module
 Gestisce il ridimensionamento responsive basato sulla risoluzione dello schermo
 """
 import platform
-from PyQt6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication
 
 
 class ResponsiveScaling:

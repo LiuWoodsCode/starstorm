@@ -1,6 +1,6 @@
-from PyQt6.QtCore import QTimer
-from PyQt6.QtGui import QColor
-from PyQt6.QtWidgets import QGraphicsDropShadowEffect, QWidget
+from PySide6.QtCore import QTimer
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import QGraphicsDropShadowEffect, QWidget
 
 import math
 
@@ -28,7 +28,7 @@ class TileGlowEffect:
 
         overlay = QWidget(parent)
         overlay.setAttribute(
-            __import__('PyQt6.QtCore', fromlist=['Qt']).Qt.WidgetAttribute.WA_TransparentForMouseEvents,
+            __import__('PySide6.QtCore', fromlist=['Qt']).Qt.WidgetAttribute.WA_TransparentForMouseEvents,
             True
         )
         # Background scuro con border-radius — dà una superficie solida al DropShadow

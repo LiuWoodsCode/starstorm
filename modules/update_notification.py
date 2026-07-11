@@ -5,14 +5,14 @@ import json
 import re
 from pathlib import Path
 
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QLabel, QHBoxLayout, QVBoxLayout,
     QGraphicsOpacityEffect, QGraphicsDropShadowEffect, QApplication
 )
-from PyQt6.QtCore import (
-    Qt, QTimer, QPropertyAnimation, QEasingCurve, QThread, pyqtSignal, QUrl
+from PySide6.QtCore import (
+    Qt, QTimer, QPropertyAnimation, QEasingCurve, QThread, Signal, QUrl
 )
-from PyQt6.QtGui import QColor, QDesktopServices
+from PySide6.QtGui import QColor, QDesktopServices
 
 
 # Versione corrente 
@@ -81,8 +81,8 @@ def _compute_position(widget: QWidget, slot: int, scaling) -> tuple:
 class _UpdateCheckWorker(QThread):
     
 
-    update_available = pyqtSignal(str, str)   # (latest_tag, release_url)
-    check_failed     = pyqtSignal(str)
+    update_available = Signal(str, str)   # (latest_tag, release_url)
+    check_failed     = Signal(str)
 
     def __init__(self, current_version: str):
         super().__init__()
@@ -202,7 +202,7 @@ class UpdateNotification(QWidget):
 
         icon_path = Path("assets/icons/update.png")
         if icon_path.exists():
-            from PyQt6.QtGui import QPixmap
+            from PySide6.QtGui import QPixmap
             self.icon_label.setPixmap(QPixmap(str(icon_path)))
         else:
             # Fallback emoji se il file non è presente

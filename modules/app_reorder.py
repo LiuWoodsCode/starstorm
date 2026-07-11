@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QLabel
-from PyQt6.QtCore import Qt, QTimer
+from PySide6.QtWidgets import QWidget, QLabel
+from PySide6.QtCore import Qt, QTimer
 import time
 
 try:
@@ -42,7 +42,7 @@ class ReorderMode:
     
     def _is_dialog_active(self):
         """Check if any dialog or menu is currently active"""
-        from PyQt6.QtWidgets import QApplication
+        from PySide6.QtWidgets import QApplication
         # Check if any modal dialog is open
         active_modal = QApplication.activeModalWidget()
         if active_modal:

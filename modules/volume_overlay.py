@@ -2,10 +2,10 @@ import sys
 import platform
 import subprocess
 import pygame
-from PyQt6.QtCore import QObject, pyqtSignal, QTimer, QEvent
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar, QApplication
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PySide6.QtCore import QObject, Signal, QTimer, QEvent
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar, QApplication
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QFont
 
 try:
     import pygame
@@ -448,8 +448,8 @@ class GlobalVolumeManager(QObject):
     
     
     
-    volume_changed = pyqtSignal(int, bool)
-    show_overlay = pyqtSignal(int, bool)
+    volume_changed = Signal(int, bool)
+    show_overlay = Signal(int, bool)
 
     def __init__(self, scaling, launcher_window=None):
         """

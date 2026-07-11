@@ -18,8 +18,8 @@ Uso in tvlauncher.py:
     self.mouse_touch = integrate_mouse_touch(self)   # da chiamare dopo aver creato carousel_container e menu_buttons
 """
 
-from PyQt6.QtCore import Qt, QPoint, QEvent
-from PyQt6.QtGui import QCursor
+from PySide6.QtCore import Qt, QPoint, QEvent
+from PySide6.QtGui import QCursor
 
 
 # Soglia in pixel oltre la quale un drag viene considerato uno swipe (e non un semplice click)

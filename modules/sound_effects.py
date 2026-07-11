@@ -1,5 +1,5 @@
-from PyQt6.QtMultimedia import QSoundEffect
-from PyQt6.QtCore import QUrl
+from PySide6.QtMultimedia import QSoundEffect
+from PySide6.QtCore import QUrl
 from pathlib import Path
 
 class SoundManager:

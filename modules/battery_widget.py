@@ -6,8 +6,8 @@ _DEBUG_BATTERY = False
 _DEBUG_PERCENT  = 80      # percentuale da simulare
 _DEBUG_CHARGING = False   # True = simula carica in corso
 
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel
-from PyQt6.QtCore import Qt, QTimer
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel
+from PySide6.QtCore import Qt, QTimer
 
 
 # Soglie percentuale
@@ -139,7 +139,7 @@ class BatteryWidget(QWidget):
         self.show()
 
     def _update_icon(self, percent: int, charging: bool):
-        from PyQt6.QtGui import QPixmap
+        from PySide6.QtGui import QPixmap
 
         icon_name = _pick_icon_name(percent, charging)
         icon_path = self.icon_dir / icon_name

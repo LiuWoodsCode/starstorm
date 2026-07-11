@@ -1,9 +1,9 @@
 import os
 import random
 from pathlib import Path
-from PyQt6.QtWidgets import QLabel, QFileDialog, QApplication, QGraphicsOpacityEffect
-from PyQt6.QtCore import QTimer, QPropertyAnimation, QEasingCurve, Qt
-from PyQt6.QtGui import QPixmap, QBrush
+from PySide6.QtWidgets import QLabel, QFileDialog, QApplication, QGraphicsOpacityEffect
+from PySide6.QtCore import QTimer, QPropertyAnimation, QEasingCurve, Qt
+from PySide6.QtGui import QPixmap, QBrush
 
 
 class BackgroundManager:

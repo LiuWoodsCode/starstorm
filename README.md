@@ -128,7 +128,7 @@ https://github.com/user-attachments/assets/09108e93-de59-4919-a60f-eb129cec89bc
 - **Python:** 3.8 or higher
 
 ### Dependencies
-- `PyQt6` - UI framework
+- `PySide6` - UI framework
 - `psutil` - Process management
 - `pygame` - Gamepad support
 - `requests`- Automatic image downloads
@@ -205,7 +205,7 @@ The Windows version is fully portable - simply press the .exe to start the launc
 This version includes everything needed:
 - Python runtime
 - Environment and launcher.sh have launching permissions already baked in
-- All Python packages (PyQt6, pygame, requests, etc.)
+- All Python packages (PySide6, pygame, requests, etc.)
 - Qt6 with XCB/Wayland support (if in trouble sudo apt install libxcb)
 
 Just extract and run:
@@ -491,13 +491,13 @@ sudo dnf install qt6-qtbase-gui
 If the launcher won't start or sound effects don't work, you may need Qt Multimedia packages:
 ```bash
 # Debian / Ubuntu / Mint:
-sudo apt install python3-pyqt6.qtmultimedia
+sudo apt install python3-PySide6.qtmultimedia
 
 # Fedora:
 sudo dnf install python3-qt6-qtmultimedia
 
 # Arch:
-sudo pacman -S python-pyqt6-multimedia
+sudo pacman -S python-PySide6-multimedia
 ```
 
 **Permission Denied:**
@@ -512,7 +512,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - [SteamGridDB](https://www.steamgriddb.com/) - For providing game artwork API
-- [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - For the UI framework
+- [PySide6](https://www.riverbankcomputing.com/software/pyqt/) - For the UI framework
 - [pygame](https://www.pygame.org/) - For gamepad support
 - Community contributors and testers
 

@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QHBoxLayout, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
-from PyQt6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, QPoint
-from PyQt6.QtGui import QPixmap, QIcon, QScreen, QColor
-from PyQt6.QtWidgets import QApplication
+from PySide6.QtWidgets import QWidget, QLabel, QHBoxLayout, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
+from PySide6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, QPoint
+from PySide6.QtGui import QPixmap, QIcon, QScreen, QColor
+from PySide6.QtWidgets import QApplication
 from pathlib import Path
 
 

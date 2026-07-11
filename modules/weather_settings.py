@@ -1,9 +1,9 @@
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QLineEdit, QComboBox, QMessageBox, QWidget
 )
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap
 from pathlib import Path
 
 
@@ -443,9 +443,9 @@ class WeatherSettingsDialog(QDialog):
 def add_weather_settings_to_menu(settings_menu, launcher):
    
     from pathlib import Path
-    from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel
-    from PyQt6.QtCore import Qt
-    from PyQt6.QtGui import QPixmap
+    from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QPixmap
     from modules.settings_menu import AnimatedToggle
 
     scaling  = settings_menu.scaling

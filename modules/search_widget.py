@@ -1,11 +1,11 @@
 import os
 import platform
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QLineEdit, QListWidget, QListWidgetItem, QGraphicsDropShadowEffect, QPushButton
 )
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QPropertyAnimation, QEasingCurve, QRect, QSize
-from PyQt6.QtGui import QFont, QKeyEvent, QColor, QPixmap, QIcon, QImage
+from PySide6.QtCore import Qt, QTimer, Signal, QPropertyAnimation, QEasingCurve, QRect, QSize
+from PySide6.QtGui import QFont, QKeyEvent, QColor, QPixmap, QIcon, QImage
 
 IS_WINDOWS = platform.system() == "Windows"
 
@@ -29,8 +29,8 @@ class QuickSearchWidget(QWidget):
     Supporta tastiera fisica e navigazione con joypad/telecomando.
     UI uniformata con la palette del launcher principale.
     """
-    app_selected = pyqtSignal(int)  # Emette l'indice dell'app selezionata
-    search_closed = pyqtSignal()    # Emette quando la ricerca viene chiusa
+    app_selected = Signal(int)  # Emette l'indice dell'app selezionata
+    search_closed = Signal()    # Emette quando la ricerca viene chiusa
     
     def __init__(self, scaling, parent=None):
         super().__init__(parent)
@@ -301,8 +301,8 @@ class QuickSearchWidget(QWidget):
     def _extract_icon_from_exe(self, exe_path):
         """Estrae l'icona da un file exe - COPIA ESATTA dal program_scanner.py"""
         try:
-            from PyQt6.QtWidgets import QFileIconProvider
-            from PyQt6.QtCore import QFileInfo
+            from PySide6.QtWidgets import QFileIconProvider
+            from PySide6.QtCore import QFileInfo
             
             if not exe_path or not os.path.exists(exe_path):
                 return None

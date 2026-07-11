@@ -2,11 +2,11 @@
 App Editor Dialog Module
 Dialog per modificare le proprietà di un'app esistente
 """
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
     QLineEdit, QPushButton, QFileDialog, QComboBox
 )
-from PyQt6.QtCore import Qt
+from PySide6.QtCore import Qt
 
 
 class EditAppDialog(QDialog):

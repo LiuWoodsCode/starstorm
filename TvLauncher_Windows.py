@@ -5,18 +5,18 @@ import os
 import winreg
 import random
 from pathlib import Path
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout,
     QHBoxLayout, QLabel, QPushButton, QFileDialog,
     QDialog, QLineEdit, QMessageBox, QGraphicsDropShadowEffect,
     QListWidget, QListWidgetItem, QProgressBar, QProgressDialog, 
 )
-from PyQt6.QtCore import (
+from PySide6.QtCore import (
     Qt, QPropertyAnimation, QEasingCurve, QPoint, QSize,
     QParallelAnimationGroup, QTimer, QCoreApplication,
-    QThread, pyqtSignal
+    QThread, Signal
 )
-from PyQt6.QtGui import QPixmap, QFont, QKeyEvent, QPainter, QColor, QIcon, QBrush
+from PySide6.QtGui import QPixmap, QFont, QKeyEvent, QPainter, QColor, QIcon, QBrush
 import psutil
 from modules.app_reorder import integrate_reorder_mode
 from modules.search_widget import QuickSearchWidget
@@ -172,9 +172,9 @@ def rounded_pixmap(original_path, width, height, radius):
 
 
 class DownloadWorker(QThread):
-    progress_update = pyqtSignal(str, int)
-    app_ready = pyqtSignal(dict)
-    finished = pyqtSignal()
+    progress_update = Signal(str, int)
+    app_ready = Signal(dict)
+    finished = Signal()
 
     def __init__(self, selected_programs, image_manager, existing_app_names):
         super().__init__()
@@ -218,9 +218,9 @@ class DownloadWorker(QThread):
 
 
 class CoverDownloadWorker(QThread):
-    progress_update = pyqtSignal(str, int)
-    cover_downloaded = pyqtSignal(int, str)
-    finished = pyqtSignal(int)
+    progress_update = Signal(str, int)
+    cover_downloaded = Signal(int, str)
+    finished = Signal(int)
 
     def __init__(self, apps_to_update, image_manager):
         super().__init__()
@@ -385,8 +385,8 @@ class AppTile(QWidget):
                     self.shadow.setYOffset(self.scaling.scale(4))
 
     def _recreate_shadow(self):
-        from PyQt6.QtWidgets import QGraphicsDropShadowEffect
-        from PyQt6.QtGui import QColor
+        from PySide6.QtWidgets import QGraphicsDropShadowEffect
+        from PySide6.QtGui import QColor
         self.shadow = QGraphicsDropShadowEffect()
         self.shadow.setBlurRadius(self.scaling.scale(15))
         self.shadow.setXOffset(0)
@@ -597,7 +597,7 @@ class TVLauncher(QMainWindow):
             if widget is None:
                 continue
             if not visible:
-                from PyQt6.QtWidgets import QGraphicsOpacityEffect
+                from PySide6.QtWidgets import QGraphicsOpacityEffect
                 opacity_effect = QGraphicsOpacityEffect()
                 opacity_effect.setOpacity(0)
                 widget.setGraphicsEffect(opacity_effect)

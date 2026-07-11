@@ -2,14 +2,14 @@
 Category Editor Dialog - Versione migliorata con Emoji Picker
 """
 
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QLineEdit, QListWidget, QListWidgetItem,
     QColorDialog, QMessageBox, QWidget, QScrollArea,
     QGridLayout, QCheckBox
 )
-from PyQt6.QtCore import Qt, QTimer, QSize, QPropertyAnimation, QEasingCurve, QRect, pyqtProperty
-from PyQt6.QtGui import QColor, QPixmap, QIcon, QPainter, QBrush, QPen
+from PySide6.QtCore import Qt, QTimer, QSize, QPropertyAnimation, QEasingCurve, QRect, Property
+from PySide6.QtGui import QColor, QPixmap, QIcon, QPainter, QBrush, QPen
 from pathlib import Path
 
 
@@ -37,7 +37,7 @@ class AnimatedToggle(QCheckBox):
             self.animation.setEndValue(0.0)
         self.animation.start()
     
-    @pyqtProperty(float)
+    @Property(float)
     def check_progress(self):
         return self._check_progress
     

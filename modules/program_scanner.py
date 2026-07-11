@@ -7,13 +7,13 @@ import os
 import json
 import platform
 from pathlib import Path
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
     QLineEdit, QPushButton, QListWidget, QListWidgetItem
 )
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize, QFileInfo
-from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QFileIconProvider
+from PySide6.QtCore import Qt, QThread, Signal, QSize, QFileInfo
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QFileIconProvider
 
 # Detect OS
 IS_WINDOWS = platform.system() == "Windows"
@@ -24,9 +24,9 @@ if IS_WINDOWS:
 
 class ProgramScanner(QThread):
     """Background thread per scansionare i programmi installati CON icone"""
-    program_found = pyqtSignal(dict)
-    scan_complete = pyqtSignal()
-    progress_update = pyqtSignal(str)
+    program_found = Signal(dict)
+    scan_complete = Signal()
+    progress_update = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -171,7 +171,7 @@ class ProgramScanner(QThread):
                                     if final_icon.lower().endswith('.exe'):
                                         icon_pixmap = self._extract_icon_from_exe(final_icon)
                                     else:
-                                        from PyQt6.QtGui import QPixmap
+                                        from PySide6.QtGui import QPixmap
                                         icon_pixmap = QPixmap(final_icon)
                                         if icon_pixmap.isNull():
                                             icon_pixmap = None
@@ -542,7 +542,7 @@ class ProgramScanDialog(QDialog):
             # FASE 2: Carica il resto in background se ci sono più di 10
             if len(cached_programs) > 10:
                 self.title_label.setText(f"Loaded 10/{len(cached_programs)} programs")
-                from PyQt6.QtCore import QTimer
+                from PySide6.QtCore import QTimer
                 QTimer.singleShot(50, lambda: self.load_remaining_icons(cached_programs[10:]))
             else:
                 self.title_label.setText(f"Loaded {len(cached_programs)} programs from cache")
@@ -558,7 +558,7 @@ class ProgramScanDialog(QDialog):
     
     def load_remaining_icons(self, remaining_programs):
         """Carica i programmi rimanenti progressivamente"""
-        from PyQt6.QtCore import QTimer, QCoreApplication
+        from PySide6.QtCore import QTimer, QCoreApplication
         
         self.remaining_queue = remaining_programs
         self.remaining_index = 0

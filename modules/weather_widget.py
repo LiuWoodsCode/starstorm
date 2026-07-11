@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QGraphicsOpacityEffect
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QThread, QPropertyAnimation, QEasingCurve
-from PyQt6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QGraphicsOpacityEffect
+from PySide6.QtCore import Qt, QTimer, Signal, QThread, QPropertyAnimation, QEasingCurve
+from PySide6.QtGui import QPixmap
 import json
 from pathlib import Path
 
@@ -16,8 +16,8 @@ except ImportError:
 
 class WeatherFetcher(QThread):
     """Thread separato per fetch API senza bloccare l'UI"""
-    weather_received = pyqtSignal(dict)
-    error_occurred = pyqtSignal(str)
+    weather_received = Signal(dict)
+    error_occurred = Signal(str)
     
     def __init__(self, city, country_code, units, latitude=None, longitude=None):
         super().__init__()
@@ -258,7 +258,7 @@ class WeatherWidget(QWidget):
     """Widget meteo che mostra temperatura e condizioni attuali"""
     
     # Signal emesso quando i dati meteo vengono aggiornati
-    weather_updated = pyqtSignal(dict)
+    weather_updated = Signal(dict)
     
     def __init__(self, scaling, parent=None):
         super().__init__(parent)
@@ -735,7 +735,7 @@ def force_launcher_refresh(launcher):
     
     
     try:
-        from PyQt6.QtCore import QCoreApplication
+        from PySide6.QtCore import QCoreApplication
         QCoreApplication.processEvents()
     except Exception as e:
         print(f"   ⚠️ Error processing events: {e}")

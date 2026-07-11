@@ -1,7 +1,7 @@
 
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel
-from PyQt6.QtCore import Qt, pyqtSignal, QPropertyAnimation, QEasingCurve
-from PyQt6.QtGui import QFont
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel
+from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QEasingCurve
+from PySide6.QtGui import QFont
 from pathlib import Path
 import json
 
@@ -82,7 +82,7 @@ class CategoryManager:
 class CategorySelector(QWidget):
     """Widget UI per la selezione visuale delle categorie"""
     
-    category_changed = pyqtSignal(int)
+    category_changed = Signal(int)
     
     def __init__(self, category_manager, scaling, parent=None):
         super().__init__(parent)
@@ -119,7 +119,7 @@ class CategorySelector(QWidget):
             }}
         """)
         
-        from PyQt6.QtWidgets import QGraphicsOpacityEffect
+        from PySide6.QtWidgets import QGraphicsOpacityEffect
         self.opacity_effect = QGraphicsOpacityEffect()
         self.opacity_effect.setOpacity(0.0)
         self.setGraphicsEffect(self.opacity_effect)
@@ -172,7 +172,7 @@ class CategorySelector(QWidget):
         self.category_manager.next_category()
         self.update_display()
         self.category_changed.emit(self.category_manager.current_category)
-        from PyQt6.QtCore import QTimer
+        from PySide6.QtCore import QTimer
         QTimer.singleShot(200, lambda: setattr(self, 'is_animating', False))
     
     def navigate_left(self):
@@ -182,7 +182,7 @@ class CategorySelector(QWidget):
         self.category_manager.prev_category()
         self.update_display()
         self.category_changed.emit(self.category_manager.current_category)
-        from PyQt6.QtCore import QTimer
+        from PySide6.QtCore import QTimer
         QTimer.singleShot(200, lambda: setattr(self, 'is_animating', False))
     
     def show_animated(self):
@@ -365,8 +365,8 @@ class QuickCategoryDialog:
     
     @staticmethod
     def show(launcher, app_data):
-        from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QWidget
-        from PyQt6.QtCore import Qt, QTimer
+        from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QWidget
+        from PySide6.QtCore import Qt, QTimer
         import pygame
         
         dialog = QDialog(launcher)
@@ -640,7 +640,7 @@ def _handle_bottom_menu_joystick(launcher):
 def _handle_category_selector_joystick_blocking(launcher):
     """FIX: Gestione category selector - LEFT/RIGHT naviga, DOWN chiude + D-PAD SUPPORT"""
     import pygame
-    from PyQt6.QtCore import QTimer
+    from PySide6.QtCore import QTimer
     
     x_axis = launcher.joystick.get_axis(0)
     y_axis = launcher.joystick.get_axis(1)
@@ -735,7 +735,7 @@ def _handle_category_selector_joystick_blocking(launcher):
 
 def _close_category_selector_with_block(launcher):
     """Chiude il category selector e blocca TUTTI gli input per 500ms"""
-    from PyQt6.QtCore import QTimer
+    from PySide6.QtCore import QTimer
     import pygame
     
     launcher.is_in_category_selector = False
@@ -786,7 +786,7 @@ def _close_category_selector_with_block(launcher):
 
 def add_category_to_edit_dialog(dialog, launcher):
     """Aggiunge selector categoria all'EditAppDialog"""
-    from PyQt6.QtWidgets import QComboBox, QLabel
+    from PySide6.QtWidgets import QComboBox, QLabel
     
     layout = dialog.layout()
     if layout is None:

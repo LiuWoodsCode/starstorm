@@ -3,8 +3,8 @@ Modulo per la gestione completa del joystick
 Gestisce inizializzazione, polling, mappatura pulsanti e notifiche
 """
 
-from PyQt6.QtCore import QTimer, Qt, QCoreApplication
-from PyQt6.QtGui import QKeyEvent
+from PySide6.QtCore import QTimer, Qt, QCoreApplication
+from PySide6.QtGui import QKeyEvent
 import pygame
 
 try:
@@ -227,7 +227,7 @@ class JoystickManager:
         # Metodo 2: activeWindow() — fallback per Windows dove funziona correttamente
         active_via_flag = getattr(self.parent, 'parental_control_dialog_active', False)
         if not active_via_flag:
-            from PyQt6.QtWidgets import QDialog
+            from PySide6.QtWidgets import QDialog
             active = QCoreApplication.instance().activeWindow()
             if not isinstance(active, QDialog):
                 return False
@@ -676,7 +676,7 @@ class JoystickManager:
 
     def _close_category_selector(self):
         """Chiude il category selector"""
-        from PyQt6.QtCore import QTimer
+        from PySide6.QtCore import QTimer
         
         self.parent.is_in_category_selector = False
         self.parent.category_selector.hide_animated()

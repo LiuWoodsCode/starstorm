@@ -3,13 +3,13 @@ Key Remapper Module for TV Launcher - STYLED VERSION
 Matches the launcher's visual design
 """
 
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QComboBox, QScrollArea, QWidget,
     QFrame
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QTimer,QObject, QEvent 
-from PyQt6.QtGui import QKeyEvent, QPixmap, QIcon
+from PySide6.QtCore import Qt, Signal, QTimer,QObject, QEvent 
+from PySide6.QtGui import QKeyEvent, QPixmap, QIcon
 from pathlib import Path
 import json
 
@@ -265,7 +265,7 @@ class KeyMapper:
 class KeyCaptureDialog(QDialog):
     """Dialog to capture a single key/button press - STYLED VERSION"""
     
-    key_captured = pyqtSignal(object)
+    key_captured = Signal(object)
     
     def __init__(self, action_name, scaling, parent=None):
         super().__init__(parent)
@@ -597,7 +597,7 @@ class KeyCaptureDialog(QDialog):
                 
                 return False  # Lascia passare gli altri eventi
         
-        from PyQt6.QtCore import QObject, QEvent
+        from PySide6.QtCore import QObject, QEvent
         self.filter = KeyTranslatorFilter(self)
         app.installEventFilter(self.filter)    
 
@@ -605,7 +605,7 @@ class KeyCaptureDialog(QDialog):
 class KeyRemapperDialog(QDialog):
     """Main key remapping dialog - FINAL VERSION (Launcher Style)"""
     
-    mappings_changed = pyqtSignal(dict)
+    mappings_changed = Signal(dict)
     
     def __init__(self, launcher, scaling, parent=None):
         super().__init__(parent)
@@ -816,7 +816,7 @@ class KeyRemapperDialog(QDialog):
         reset_icon_path = Path("assets/icons/refresh.png")
         if reset_icon_path.exists():
             reset_btn.setIcon(QIcon(str(reset_icon_path)))
-            from PyQt6.QtCore import QSize
+            from PySide6.QtCore import QSize
             reset_btn.setIconSize(QSize(self.scaling.scale(20), self.scaling.scale(20)))
         else:
             reset_btn.setText("🔄 Reset All")
@@ -1125,7 +1125,7 @@ class KeyRemapperDialog(QDialog):
         save_icon_path = Path("assets/icons/backup.png")
         if save_icon_path.exists():
             save_btn.setIcon(QIcon(str(save_icon_path)))
-            from PyQt6.QtCore import QSize
+            from PySide6.QtCore import QSize
             save_btn.setIconSize(QSize(self.scaling.scale(24), self.scaling.scale(24)))
         else:
             save_btn.setText("💾 Save and Close")

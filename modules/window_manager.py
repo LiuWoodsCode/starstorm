@@ -3,8 +3,8 @@ Window Manager Module
 Gestisce la minimizzazione/ripristino del launcher quando le app vengono lanciate
 """
 
-from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QApplication
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication
 
 class WindowManager:
     """Gestisce lo stato della finestra del launcher"""

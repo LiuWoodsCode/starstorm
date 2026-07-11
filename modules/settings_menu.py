@@ -1,11 +1,11 @@
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QScrollArea, QCheckBox, QDialog,
     QLineEdit, QFileDialog, QMessageBox,QRadioButton,
     QButtonGroup
 )
-from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QPoint, pyqtSignal, QTimer, QRectF, pyqtProperty,  QSize
-from PyQt6.QtGui import QIcon, QPainter, QColor, QPen,  QPixmap
+from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QPoint, Signal, QTimer, QRectF, Property,  QSize
+from PySide6.QtGui import QIcon, QPainter, QColor, QPen,  QPixmap
 from pathlib import Path
 import json
 from modules.key_remapper import KeyRemapperDialog
@@ -364,7 +364,7 @@ class AnimatedToggle(QWidget):
         self.animation.setEasingCurve(QEasingCurve.Type.InOutCubic)
         self.animation.setDuration(250)
         
-    @pyqtProperty(float)
+    @Property(float)
     def circle_position(self):
         return self._circle_position
     
@@ -450,8 +450,8 @@ class AnimatedToggle(QWidget):
 class SettingsMenu(QWidget):
     """Menu laterale con stile coerente al launcher"""
     
-    menu_closed = pyqtSignal()
-    config_changed = pyqtSignal(dict)
+    menu_closed = Signal()
+    config_changed = Signal(dict)
     
     def __init__(self, scaling, parent=None):
         super().__init__(parent)
@@ -1277,8 +1277,8 @@ class SettingsMenu(QWidget):
     
     def _handle_open_update(self):
         """Apre la release page dell'aggiornamento disponibile nel browser"""
-        from PyQt6.QtCore import QUrl
-        from PyQt6.QtGui import QDesktopServices
+        from PySide6.QtCore import QUrl
+        from PySide6.QtGui import QDesktopServices
         url = getattr(self, '_update_release_url',
                       "https://github.com/Darkvinx88/TvLauncher/releases/latest")
         QDesktopServices.openUrl(QUrl(url))
@@ -1788,7 +1788,7 @@ class SettingsMenu(QWidget):
     def _open_category_editor(self):
         """Apre il category editor"""
         from modules.category_editor import CategoryEditorDialog
-        from PyQt6.QtCore import Qt
+        from PySide6.QtCore import Qt
         
         if not hasattr(self.launcher, 'category_manager'):
             msg_box = QMessageBox(self.launcher)
