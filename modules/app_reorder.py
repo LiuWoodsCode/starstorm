@@ -104,7 +104,7 @@ class ReorderMode:
             self.instruction_label = QLabel(self.overlay)
             self.instruction_label.setText(
                 "🔄 REORDER MODE\n\n"
-                "← → to move position\n"
+                "← → ↑ ↓ to move position\n"
                 "Enter/A to confirm | Esc/B to cancel\n"
                 "R or RB to toggle mode"
             )
@@ -237,56 +237,47 @@ class ReorderMode:
         # Update position numbers
         self._add_position_numbers()    
     def move_left(self):
-        """Moves target position left"""
-        if not self.is_active:
-            return False
-        
-        num_apps = len(self.launcher.apps)
-        
-        if num_apps <= 5:
-            # Linear movement
-            if self.target_index > 0:
-                self.target_index -= 1
-                # Don't animate, just update highlights
-                self._update_tile_highlights()
-                return True
-        else:
-            # Circular movement - update target BEFORE animation
-            new_target = (self.target_index - 1) % num_apps
-            self.target_index = new_target
-            self.launcher.current_index = self.target_index
-            self.launcher.animate_carousel("left")
-            # Highlights will update after animation
-            QTimer.singleShot(260, self._update_tile_highlights)
-            return True
-        
-        return False
+        """Moves the target one cell left in the app grid."""
+        return self._move_target("left")
     
     def move_right(self):
-        """Moves target position right"""
+        """Moves the target one cell right in the app grid."""
+        return self._move_target("right")
+
+    def move_up(self):
+        """Moves the target one row up in the app grid."""
+        return self._move_target("up")
+
+    def move_down(self):
+        """Moves the target one row down in the app grid."""
+        return self._move_target("down")
+
+    def _move_target(self, direction):
+        """Update the reorder target using the launcher's grid navigation rules."""
         if not self.is_active:
             return False
-        
-        num_apps = len(self.launcher.apps)
-        
-        if num_apps <= 5:
-            # Linear movement
-            if self.target_index < num_apps - 1:
-                self.target_index += 1
-                # Don't animate, just update highlights
-                self._update_tile_highlights()
-                return True
-        else:
-            # Circular movement - update target BEFORE animation
-            new_target = (self.target_index + 1) % num_apps
-            self.target_index = new_target
-            self.launcher.current_index = self.target_index
-            self.launcher.animate_carousel("right")
-            # Highlights will update after animation
-            QTimer.singleShot(260, self._update_tile_highlights)
-            return True
-        
-        return False
+
+        columns = getattr(self.launcher, 'grid_columns', 1)
+        candidate = self.target_index
+        if direction == "left" and candidate % columns:
+            candidate -= 1
+        elif direction == "right" and candidate % columns < columns - 1:
+            candidate += 1
+            if candidate >= len(self.launcher.apps):
+                candidate = self.target_index
+        elif direction == "up" and candidate >= columns:
+            candidate -= columns
+        elif direction == "down" and candidate + columns < len(self.launcher.apps):
+            candidate += columns
+
+        if candidate == self.target_index:
+            return False
+
+        self.target_index = candidate
+        self.launcher.current_index = candidate
+        self.launcher.animate_carousel(direction)
+        self._update_tile_highlights()
+        return True
     
     def confirm_reorder(self):
         """Confirms and applies the reorder"""
@@ -413,11 +404,17 @@ def integrate_reorder_mode(launcher):
         # In reorder mode, intercept navigation
         if launcher.reorder_mode.is_active:
             if key == Qt.Key.Key_Left:
-                if launcher.reorder_mode.move_left():
-                    return
+                launcher.reorder_mode.move_left()
+                return
             elif key == Qt.Key.Key_Right:
-                if launcher.reorder_mode.move_right():
-                    return
+                launcher.reorder_mode.move_right()
+                return
+            elif key == Qt.Key.Key_Up:
+                launcher.reorder_mode.move_up()
+                return
+            elif key == Qt.Key.Key_Down:
+                launcher.reorder_mode.move_down()
+                return
             elif key in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
                 if launcher.reorder_mode.confirm_reorder():
                     return

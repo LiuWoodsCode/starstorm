@@ -3,11 +3,10 @@ Mouse / Touch Manager Module
 Aggiunge supporto mouse e touchscreen al launcher, senza modificare gli altri moduli.
 
 Funzionalità:
-- Click su una tile non focalizzata -> la seleziona (carousel si sposta su di essa)
+- Click su una tile non focalizzata -> la seleziona
 - Click su una tile già focalizzata -> lancia l'app (equivalente a Enter)
 - Doppio click su una tile -> lancia sempre l'app, indipendentemente dal focus
-- Drag orizzontale / swipe sul carosello (mouse o touch) -> naviga tra le app
-- Rotellina del mouse sul carosello -> naviga tra le app
+- Rotellina del mouse/touch sulla griglia -> scorre verticalmente
 - Cursore "a manina" su tile e pulsanti per un feedback visivo migliore
 - Tap sui pulsanti del menu (restart/sleep/shutdown/close) già funzionanti di default
   (QPushButton li supporta nativamente), qui vengono solo uniformati col cursore pointer
@@ -27,7 +26,7 @@ SWIPE_THRESHOLD = 40
 
 
 class MouseTouchManager:
-    """Aggiunge interazione mouse/touch alla carousel e alla UI del launcher."""
+    """Aggiunge interazione mouse/touch alla griglia e alla UI del launcher."""
 
     def __init__(self, launcher):
         self.launcher = launcher
@@ -126,6 +125,13 @@ class MouseTouchManager:
     def _enable_carousel_drag_and_wheel(self):
         launcher = self.launcher
         container = launcher.carousel_container
+
+        # A QScrollArea already provides natural vertical wheel/touch scrolling
+        # for the grid.  Do not replace its handlers with carousel gestures.
+        if hasattr(launcher, "grid_columns"):
+            container.setCursor(QCursor(Qt.CursorShape.OpenHandCursor))
+            return
+
         container.setCursor(QCursor(Qt.CursorShape.OpenHandCursor))
 
         container.mousePressEvent = self._container_mouse_press
@@ -190,22 +196,7 @@ class MouseTouchManager:
         if num_apps == 0:
             return
 
-        if direction == "right":
-            if num_apps <= 5:
-                if launcher.current_index < num_apps - 1:
-                    launcher.current_index += 1
-                    launcher.animate_carousel("right")
-            else:
-                launcher.current_index = (launcher.current_index + 1) % num_apps
-                launcher.animate_carousel("right")
-        else:
-            if num_apps <= 5:
-                if launcher.current_index > 0:
-                    launcher.current_index -= 1
-                    launcher.animate_carousel("left")
-            else:
-                launcher.current_index = (launcher.current_index - 1) % num_apps
-                launcher.animate_carousel("left")
+        launcher.navigate_grid(direction)
 
     # ------------------------------------------------------------------
     # Pulsanti menu (restart/sleep/shutdown/close): solo cursore pointer,

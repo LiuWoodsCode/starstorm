@@ -9,11 +9,11 @@ from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout,
     QHBoxLayout, QLabel, QPushButton, QFileDialog,
     QDialog, QLineEdit, QMessageBox, QGraphicsDropShadowEffect,
-    QListWidget, QListWidgetItem, QProgressBar, QProgressDialog, 
+    QListWidget, QListWidgetItem, QProgressBar, QProgressDialog,
+    QGridLayout, QScrollArea, QFrame,
 )
 from PySide6.QtCore import (
-    Qt, QPropertyAnimation, QEasingCurve, QPoint, QSize,
-    QParallelAnimationGroup, QTimer, QCoreApplication,
+    Qt, QTimer,
     QThread, Signal
 )
 from PySide6.QtGui import QPixmap, QFont, QKeyEvent, QPainter, QColor, QIcon, QBrush
@@ -443,6 +443,10 @@ class TVLauncher(QMainWindow):
         self.key_mapper.install_event_filter(QApplication.instance())
         self.current_index = 0
         self.tiles = []
+        self.normal_width = self.scaling.scale(360)
+        self.normal_height = self.scaling.scale(260)
+        self.focused_width = self.scaling.scale(400)
+        self.focused_height = self.scaling.scale(288)
         self.menu_button_index = 0
         self.is_in_menu = False
         self.joystick_notification = None
@@ -467,10 +471,6 @@ class TVLauncher(QMainWindow):
 
         self.init_ui()
 
-        self.normal_width = self.scaling.scale(360)
-        self.normal_height = self.scaling.scale(260)
-        self.focused_width = self.scaling.scale(400)
-        self.focused_height = self.scaling.scale(288)
         self.build_infinite_carousel()
         integrate_reorder_mode(self)
         self.settings_menu = SettingsMenu(self.scaling, self)
@@ -793,14 +793,47 @@ class TVLauncher(QMainWindow):
         main_layout.addLayout(header_layout)
         main_layout.addSpacing(40)
         main_layout.addStretch(3)
-        self.carousel_container = QWidget()
-        self.carousel_container.setFixedHeight(self.scaling.scale(310))
-        visible_width = (5 * self.scaling.scale(400)) + (4 * self.scaling.scale(5))
-        self.carousel_container.setFixedWidth(visible_width)
-        self.carousel_container.setStyleSheet(Styles.TRANSPARENT)
-        self.max_visible_tiles = 9
-        self.tile_width = self.scaling.scale(360)
+        # App tiles are displayed in a scrollable grid.  Keep the historical
+        # ``carousel_container`` name so integrations can continue to target
+        # the app area without knowing about this implementation detail.
+        self.grid_columns = 4
         self.tile_spacing = self.scaling.scale(17)
+        self.grid_margin = self.scaling.scale(16)
+        self.grid_content_width = (
+            self.grid_columns * self.focused_width
+            + (self.grid_columns - 1) * self.tile_spacing
+            + 2 * self.grid_margin
+        )
+        self.carousel_container = QScrollArea()
+        self.carousel_container.setFixedHeight(self.scaling.scale(620))
+        # Alignment in the parent layout prevents a QScrollArea from expanding
+        # to its content size automatically.  Give it an explicit viewport
+        # width so all grid columns are visible rather than clipped to a sliver.
+        self.carousel_container.setFixedWidth(
+            self.grid_content_width + self.scaling.scale(24)
+        )
+        self.carousel_container.setFrameShape(QFrame.Shape.NoFrame)
+        self.carousel_container.setWidgetResizable(False)
+        self.carousel_container.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+        self.carousel_container.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAsNeeded
+        )
+        self.carousel_container.setStyleSheet(Styles.TRANSPARENT)
+
+        self.app_grid_content = QWidget()
+        self.app_grid_content.setStyleSheet(Styles.TRANSPARENT)
+        self.app_grid_layout = QGridLayout(self.app_grid_content)
+        self.app_grid_layout.setContentsMargins(
+            self.grid_margin, self.grid_margin, self.grid_margin, self.grid_margin
+        )
+        self.app_grid_layout.setHorizontalSpacing(self.tile_spacing)
+        self.app_grid_layout.setVerticalSpacing(self.tile_spacing)
+        self.app_grid_layout.setAlignment(
+            Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop
+        )
+        self.carousel_container.setWidget(self.app_grid_content)
         
         main_layout.addWidget(self.carousel_container, alignment=Qt.AlignmentFlag.AlignCenter)
         main_layout.addSpacing(20)
@@ -866,7 +899,7 @@ class TVLauncher(QMainWindow):
         menu_layout.addWidget(button_widget)
         menu_layout.addStretch()
         main_layout.addWidget(menu_container)
-        instructions = QLabel("Navigate: ← → ↑ ↓ | Launch: Enter/A | Edit: E/X | Delete: Del/Y | Settings: S/Start | Search: F/LB | Exit: Esc/B")
+        instructions = QLabel("Navigate grid: ← → ↑ ↓ | Launch: Enter/A | Edit: E/X | Delete: Del/Y | Settings: S/Start | Search: F/LB | Exit: Esc/B")
         instructions.setStyleSheet(Styles.instructions(self.scaling.scale_font(11)))
         instructions.setAlignment(Qt.AlignmentFlag.AlignCenter)
         main_layout.addWidget(instructions)
@@ -1327,6 +1360,7 @@ class TVLauncher(QMainWindow):
             self._make_info_dialog("Error", f"Impossibile eseguire {action}:<br>{str(e)}").exec()
 
     def build_infinite_carousel(self):
+        """Build the app grid (method name retained for existing integrations)."""
         for tile in self.tiles:
             if hasattr(tile, 'glow_effect') and tile.glow_effect:
                 try:
@@ -1338,133 +1372,91 @@ class TVLauncher(QMainWindow):
             tile.setParent(None)
             tile.deleteLater()
         self.tiles.clear()
+
+        while self.app_grid_layout.count():
+            item = self.app_grid_layout.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+
         if not self.apps:
-            empty_label = QLabel("No apps added yet. Press '+ Add App' to get started!", self.carousel_container)
+            empty_label = QLabel("No apps added yet. Press '+ Add App' to get started!", self.app_grid_content)
             empty_label.setStyleSheet(Styles.EMPTY_LABEL)
-            empty_label.move(0, 100)
+            empty_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.app_grid_layout.addWidget(
+                empty_label, 0, 0, 1, self.grid_columns,
+                Qt.AlignmentFlag.AlignCenter
+            )
+            self.app_grid_content.setFixedSize(
+                self.scaling.scale(900), self.scaling.scale(240)
+            )
             return
         if self.current_index >= len(self.apps):
             self.current_index = 0
-        num_apps = len(self.apps)
-        
-        if num_apps <= 5:
-            for i in range(num_apps):
-                tile = AppTile(self.apps[i], self.scaling, self.carousel_container)
-                tile.app_index = i
-                is_focused = (i == self.current_index)
-                tile.set_focused(is_focused)
-                self.tiles.append(tile)
-        else:
-            center_tile_index = 0
-            for i in range(self.max_visible_tiles):
-                app_offset = i - center_tile_index
-                app_idx = (self.current_index + app_offset) % num_apps
-                tile = AppTile(self.apps[app_idx], self.scaling, self.carousel_container)
-                tile.app_index = app_idx
-                is_focused = (i == center_tile_index)
-                tile.set_focused(is_focused)
-                self.tiles.append(tile)
-        
-        self._position_all_tiles()
-        for tile in self.tiles:
-            tile.show()
-        current_app = self.apps[self.current_index]
-   
-    def _position_all_tiles(self):
-        if not self.tiles:
-            return
-        num_apps = len(self.apps)
-        
-        if num_apps <= 5:
-            start_x = self.scaling.scale(5)
-            x_pos = int(start_x)
-            for i, tile in enumerate(self.tiles):
-                tile.move(int(x_pos), 22)
-                if i == self.current_index:
-                    x_pos += self.focused_width + self.tile_spacing
-                else:
-                    x_pos += self.normal_width + self.tile_spacing
-        else:
-            start_x = self.scaling.scale(5)
-            x_pos = int(start_x)
-            for i, tile in enumerate(self.tiles):
-                tile.move(int(x_pos), 22)
-                x_pos += tile.width() + self.tile_spacing
+        for column in range(self.grid_columns):
+            self.app_grid_layout.setColumnMinimumWidth(column, self.focused_width)
+
+        for index, app in enumerate(self.apps):
+            tile = AppTile(app, self.scaling, self.app_grid_content)
+            tile.app_index = index
+            tile.set_focused(index == self.current_index)
+            row, column = divmod(index, self.grid_columns)
+            self.app_grid_layout.addWidget(
+                tile, row, column,
+                Qt.AlignmentFlag.AlignCenter
+            )
+            self.app_grid_layout.setRowMinimumHeight(row, self.focused_height)
+            self.tiles.append(tile)
+
+        rows = (len(self.apps) + self.grid_columns - 1) // self.grid_columns
+        content_height = (
+            rows * self.focused_height
+            + max(0, rows - 1) * self.tile_spacing
+            + 2 * self.grid_margin
+        )
+        self.app_grid_content.setFixedSize(self.grid_content_width, content_height)
+        QTimer.singleShot(0, self._ensure_current_tile_visible)
+
+    def _ensure_current_tile_visible(self):
+        """Scroll the grid just enough to keep the selected app on screen."""
+        if 0 <= self.current_index < len(self.tiles):
+            self.carousel_container.ensureWidgetVisible(
+                self.tiles[self.current_index],
+                self.grid_margin,
+                self.grid_margin,
+            )
+
+    def navigate_grid(self, direction):
+        """Move selection within the visible grid without wrapping at edges."""
+        if not self.apps:
+            return False
+
+        candidate = self.current_index
+        if direction == "left" and candidate % self.grid_columns:
+            candidate -= 1
+        elif direction == "right" and candidate % self.grid_columns < self.grid_columns - 1:
+            candidate += 1
+            if candidate >= len(self.apps):
+                candidate = self.current_index
+        elif direction == "up" and candidate >= self.grid_columns:
+            candidate -= self.grid_columns
+        elif direction == "down" and candidate + self.grid_columns < len(self.apps):
+            candidate += self.grid_columns
+
+        if candidate == self.current_index:
+            return False
+
+        self.current_index = candidate
+        self.animate_carousel(direction)
+        return True
    
     def animate_carousel(self, direction):
-        if self.is_animating or not self.tiles:
+        """Refresh grid focus (kept as the navigation hook for integrations)."""
+        if not self.tiles:
             return
         self.sound_manager.navigate()
-        num_apps = len(self.apps)
-        
-        if num_apps <= 5:
-            for i, tile in enumerate(self.tiles):
-                tile.set_focused(i == self.current_index)
-            self._position_all_tiles()
-            return
-        
-        self.is_animating = True
-        shift_distance = self.tile_width + self.tile_spacing
-        
-        if direction == "left":
-            last_tile = self.tiles[-1]
-            new_app_idx = self.current_index % num_apps
-            last_tile.app_data = self.apps[new_app_idx]
-            last_tile.app_index = new_app_idx
-            last_tile._normal_pixmap = None
-            last_tile._focused_pixmap = None
-            last_tile.name_label.setText(self.apps[new_app_idx]['name'])
-            last_tile.set_focused(False)
-            start_x = self.scaling.scale(50)
-            last_tile.move(int(start_x - shift_distance), 0)
-            self.tiles.pop()
-            self.tiles.insert(0, last_tile)
-        
-        self.animation_group = QParallelAnimationGroup()
         for tile in self.tiles:
-            anim = QPropertyAnimation(tile, b"pos")
-            anim.setDuration(250)
-            anim.setEasingCurve(QEasingCurve.Type.OutCubic)
-            start_pos = tile.pos()
-            if direction == "right":
-                end_pos = QPoint(start_pos.x() - shift_distance, start_pos.y())
-            else:
-                end_pos = QPoint(start_pos.x() + shift_distance, start_pos.y())
-            anim.setStartValue(start_pos)
-            anim.setEndValue(end_pos)
-            self.animation_group.addAnimation(anim)
-        
-        self.animation_group.finished.connect(lambda: self.reposition_tiles(direction))
-        self.animation_group.start()
-
-    def reposition_tiles(self, direction):
-        num_apps = len(self.apps)
-        center_tile_index = 0
-        
-        if direction == "right":
-            first_tile = self.tiles.pop(0)
-            new_app_idx = (self.current_index + (self.max_visible_tiles - 1)) % num_apps
-            first_tile.app_data = self.apps[new_app_idx]
-            first_tile.app_index = new_app_idx
-            first_tile._normal_pixmap = None
-            first_tile._focused_pixmap = None
-            first_tile.name_label.setText(self.apps[new_app_idx]['name'])
-            first_tile.set_focused(False)
-            self.tiles.append(first_tile)
-        else:
-            last_tile = self.tiles[-1]
-            new_app_idx = (self.current_index + (self.max_visible_tiles - 1)) % num_apps
-            last_tile.app_data = self.apps[new_app_idx]
-            last_tile.app_index = new_app_idx
-            last_tile._normal_pixmap = None
-            last_tile._focused_pixmap = None
-            last_tile.name_label.setText(self.apps[new_app_idx]['name'])
-            last_tile.set_focused(False)
-            
-        for i, tile in enumerate(self.tiles):
-            tile.set_focused(i == center_tile_index)
-        self._position_all_tiles()
-        self.is_animating = False
+            tile.set_focused(tile.app_index == self.current_index)
+        QTimer.singleShot(0, self._ensure_current_tile_visible)
 
     def scan_programs(self):
         dialog = ProgramScanDialog(self.image_manager, self, scaling=self.scaling, cache_file=SCANNER_CACHE_FILE)
@@ -1668,44 +1660,33 @@ class TVLauncher(QMainWindow):
 
         if key == Qt.Key.Key_Down:
             if not self.is_in_menu:
-                self.sound_manager.navigate()
-                self.is_in_menu = True
-                self.menu_button_index = 0
-                self.update_menu_focus()
+                if not self.navigate_grid("down"):
+                    self.sound_manager.navigate()
+                    self.is_in_menu = True
+                    self.menu_button_index = 0
+                    self.update_menu_focus()
 
         elif key == Qt.Key.Key_Up:
             if self.is_in_menu:
                 self.sound_manager.navigate()
                 self.is_in_menu = False
                 self._reset_menu_styles()
+            else:
+                self.navigate_grid("up")
 
         elif key == Qt.Key.Key_Right:
             if self.is_in_menu:
                 self.menu_button_index = (self.menu_button_index + 1) % len(self.menu_buttons)
                 self.update_menu_focus()
-            elif self.apps and not self.is_animating:
-                num_apps = len(self.apps)
-                if num_apps <= 5:
-                    if self.current_index < num_apps - 1:
-                        self.current_index += 1
-                        self.animate_carousel("right")
-                else:
-                    self.current_index = (self.current_index + 1) % num_apps
-                    self.animate_carousel("right")
+            elif self.apps:
+                self.navigate_grid("right")
 
         elif key == Qt.Key.Key_Left:
             if self.is_in_menu:
                 self.menu_button_index = (self.menu_button_index - 1) % len(self.menu_buttons)
                 self.update_menu_focus()
-            elif self.apps and not self.is_animating:
-                num_apps = len(self.apps)
-                if num_apps <= 5:
-                    if self.current_index > 0:
-                        self.current_index -= 1
-                        self.animate_carousel("left")
-                else:
-                    self.current_index = (self.current_index - 1) % num_apps
-                    self.animate_carousel("left")
+            elif self.apps:
+                self.navigate_grid("left")
 
         elif key == Qt.Key.Key_Return or key == Qt.Key.Key_Enter:
             if self.is_in_menu:

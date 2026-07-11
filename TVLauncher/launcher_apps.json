@@ -1,0 +1,68 @@
+{
+  "apps": [
+    {
+      "name": "Item1",
+      "path": "item1",
+      "icon": "",
+      "category": "Other"
+    },
+    {
+      "name": "Item2",
+      "path": "item2",
+      "icon": "",
+      "category": "Other"
+    },
+    {
+      "name": "Item2",
+      "path": "Item3",
+      "icon": "",
+      "category": "Other"
+    },
+    {
+      "name": "Item4",
+      "path": "Item4",
+      "icon": "",
+      "category": "Other"
+    }
+  ],
+  "steamgriddb_api_key": "",
+  "show_clock": true,
+  "auto_download": true,
+  "tile_glow": true,
+  "sound_effects": false,
+  "fullscreen": true,
+  "show_weather": false,
+  "weather_city": "Milan",
+  "weather_country_code": "IT",
+  "weather_units": "metric",
+  "background": "",
+  "auto_change_wallpaper": false,
+  "wallpaper_interval": 300000,
+  "categories": [
+    {
+      "name": "All",
+      "icon": "\ud83c\udfae",
+      "color": "#ffffff"
+    },
+    {
+      "name": "Games",
+      "icon": "\ud83c\udfae",
+      "color": "#4CAF50"
+    },
+    {
+      "name": "Media",
+      "icon": "\ud83c\udfac",
+      "color": "#2196F3"
+    },
+    {
+      "name": "Programs",
+      "icon": "\ud83d\udcbc",
+      "color": "#FF9800"
+    },
+    {
+      "name": "Other",
+      "icon": "\ud83d\udce6",
+      "color": "#9E9E9E"
+    }
+  ]
+}
