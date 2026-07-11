@@ -291,13 +291,13 @@ class AppTile(QWidget):
         self.setGraphicsEffect(self.shadow)
         layout.addWidget(self.image_label)
         
-        self.name_label = QLabel(app_data['name'])
-        self.name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.name_label.setMaximumWidth(self.normal_width)
-        self.name_label.setStyleSheet(
-            Styles.tile_name_normal(self.scaling.scale_font(14))
-        )
-        layout.addWidget(self.name_label)
+        # self.name_label = QLabel(app_data['name'])
+        # self.name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.name_label.setMaximumWidth(self.normal_width)
+        # self.name_label.setStyleSheet(
+        #     Styles.tile_name_normal(self.scaling.scale_font(14))
+        # )
+        # layout.addWidget(self.name_label)
         self.setLayout(layout)
         self.set_focused(False)
 
@@ -322,9 +322,9 @@ class AppTile(QWidget):
             self.image_label.setStyleSheet(
                 Styles.tile_image_focused(self.scaling.scale(3), self.border_radius, self.scaling.scale_font(18))
             )
-            self.name_label.setStyleSheet(
-                Styles.tile_name_focused(self.scaling.scale_font(15))
-            )
+            # self.name_label.setStyleSheet(
+            #     Styles.tile_name_focused(self.scaling.scale_font(15))
+            # )
             
             glow_enabled = self._is_glow_enabled()
             
@@ -364,9 +364,9 @@ class AppTile(QWidget):
             self.image_label.setStyleSheet(
                 Styles.tile_image_normal(self.border_radius, self.scaling.scale_font(18))
             )
-            self.name_label.setStyleSheet(
-                Styles.tile_name_normal(self.scaling.scale_font(14))
-            )
+            # self.name_label.setStyleSheet(
+            #     Styles.tile_name_normal(self.scaling.scale_font(14))
+            # )
             
             if hasattr(self, 'shadow') and self.shadow:
                 try:
