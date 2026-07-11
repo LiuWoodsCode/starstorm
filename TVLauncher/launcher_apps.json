@@ -3,26 +3,22 @@
     {
       "name": "Item1",
       "path": "item1",
-      "icon": "",
-      "category": "Other"
+      "icon": ""
     },
     {
       "name": "Item2",
       "path": "item2",
-      "icon": "",
-      "category": "Other"
+      "icon": ""
     },
     {
       "name": "Item2",
       "path": "Item3",
-      "icon": "",
-      "category": "Other"
+      "icon": ""
     },
     {
       "name": "Item4",
       "path": "Item4",
-      "icon": "",
-      "category": "Other"
+      "icon": ""
     }
   ],
   "steamgriddb_api_key": "",
@@ -37,32 +33,5 @@
   "weather_units": "metric",
   "background": "",
   "auto_change_wallpaper": false,
-  "wallpaper_interval": 300000,
-  "categories": [
-    {
-      "name": "All",
-      "icon": "\ud83c\udfae",
-      "color": "#ffffff"
-    },
-    {
-      "name": "Games",
-      "icon": "\ud83c\udfae",
-      "color": "#4CAF50"
-    },
-    {
-      "name": "Media",
-      "icon": "\ud83c\udfac",
-      "color": "#2196F3"
-    },
-    {
-      "name": "Programs",
-      "icon": "\ud83d\udcbc",
-      "color": "#FF9800"
-    },
-    {
-      "name": "Other",
-      "icon": "\ud83d\udce6",
-      "color": "#9E9E9E"
-    }
-  ]
+  "wallpaper_interval": 300000
 }

@@ -649,17 +649,6 @@ class SettingsMenu(QWidget):
         #  APPEARANCE  
         layout.addSpacing(self.scaling.scale(20))
         self._add_section_title(layout, "Appearance")
-        from modules.category_editor import add_category_editor_to_settings
-        manage_cat_btn = self._create_menu_button(
-            "Manage Categories",
-            "Customize names, icons, and colors",
-            lambda: self._open_category_editor(),
-            icon_dir / "folder.png"
-        )
-        layout.addWidget(manage_cat_btn)
-        self.menu_items.append(manage_cat_btn)
-
-        
         self.clock_toggle = self._create_toggle(
             "Show Clock",
             "Display time and date in header",
@@ -1785,68 +1774,6 @@ class SettingsMenu(QWidget):
             "The launcher is now in its default state."
         )
     
-    def _open_category_editor(self):
-        """Apre il category editor"""
-        from modules.category_editor import CategoryEditorDialog
-        from PySide6.QtCore import Qt
-        
-        if not hasattr(self.launcher, 'category_manager'):
-            msg_box = QMessageBox(self.launcher)
-            msg_box.setWindowTitle("Not Available")
-            msg_box.setText("Category system is not initialized!")
-            msg_box.setIcon(QMessageBox.Icon.Warning)
-            msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
-            
-            msg_box.setStyleSheet("""
-                QMessageBox {
-                    background-color: #1a1a1a;
-                    color: white;
-                }
-                QMessageBox QLabel {
-                    color: white;
-                    font-size: 14px;
-                    padding: 10px;
-                }
-                QMessageBox QPushButton {
-                    background-color: #2a2a2a;
-                    color: white;
-                    border: 2px solid #444;
-                    padding: 10px 30px;
-                    border-radius: 8px;
-                    font-size: 14px;
-                    font-weight: bold;
-                    min-width: 80px;
-                }
-                QMessageBox QPushButton:hover {
-                    background-color: #3a3a3a;
-                    border-color: #666;
-                }
-            """)
-            
-            msg_box.exec()
-            return
-        
-        self.close_menu()
-        
-        def open_editor():
-            dialog = CategoryEditorDialog(
-                self.launcher.category_manager,
-                self.scaling,
-                self.launcher
-            )
-            
-            if dialog.exec() == QDialog.DialogCode.Accepted:
-                self.launcher.save_config()
-                
-                # Usa il metodo helper già esistente per il messaggio di successo
-                self._show_success_dialog(
-                    "Changes Saved",
-                    "Categories updated!\n\nRestart the launcher to see all changes."
-                )
-            
-            self.launcher.setFocus()
-        
-        QTimer.singleShot(350, open_editor)
     def _handle_key_remapper(self):
             """Apre il dialog per rimappare i tasti"""
             if not self.launcher:

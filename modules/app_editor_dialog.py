@@ -4,7 +4,7 @@ Dialog per modificare le proprietà di un'app esistente
 """
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, 
-    QLineEdit, QPushButton, QFileDialog, QComboBox
+    QLineEdit, QPushButton, QFileDialog
 )
 from PySide6.QtCore import Qt
 
@@ -18,7 +18,7 @@ class EditAppDialog(QDialog):
         self._s = s
         self.setWindowTitle("Edit App")
         self.setModal(True)
-        self.setFixedSize(s.scale(600), s.scale(520))
+        self.setFixedSize(s.scale(600), s.scale(420))
         self.setStyleSheet(f"""
             QDialog {{ background-color: #1a1a1a; }}
             QLabel {{ color: white; font-size: {s.scale_font(16)}px; }}
@@ -80,48 +80,6 @@ class EditAppDialog(QDialog):
         self.icon_button.clicked.connect(self.browse_icon)
         icon_container.addWidget(self.icon_button, 1)
         layout.addLayout(icon_container)
-        
-        # Category
-        category_label = QLabel("Category:")
-        category_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        layout.addWidget(category_label)
-        
-        self.category_combo = QComboBox()
-        if hasattr(parent, 'category_manager'):
-            self.category_combo.addItems(parent.category_manager.get_category_names())
-        else:
-            self.category_combo.addItems(['Games', 'Media', 'Work', 'Other'])
-        
-        self.category_combo.setStyleSheet(f"""
-            QComboBox {{
-                background-color: #2a2a2a;
-                color: white;
-                border: 2px solid #444;
-                padding: {s.scale(10)}px;
-                border-radius: {s.scale(8)}px;
-                font-size: {s.scale_font(14)}px;
-            }}
-            QComboBox::drop-down {{
-                border: none;
-            }}
-            QComboBox::down-arrow {{
-                image: none;
-                border: none;
-            }}
-            QComboBox QAbstractItemView {{
-                background-color: #2a2a2a;
-                color: white;
-                selection-background-color: #3a3a3a;
-            }}
-        """)
-        
-        # Imposta categoria corrente
-        current_category = app_data.get('category', 'Other')
-        index = self.category_combo.findText(current_category)
-        if index >= 0:
-            self.category_combo.setCurrentIndex(index)
-        
-        layout.addWidget(self.category_combo)
         
         layout.addSpacing(s.scale(20))
         
@@ -201,5 +159,4 @@ class EditAppDialog(QDialog):
             'name': self.name_input.text(),
             'path': self.exe_input.text(),
             'icon': self.icon_input.text(),
-            'category': self.category_combo.currentText()
         }

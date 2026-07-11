@@ -36,7 +36,6 @@ class KeyMapper:
         'quick_search': Qt.Key.Key_F,
         'reorder_mode': Qt.Key.Key_R,
         'settings': Qt.Key.Key_S,
-        'change_category': Qt.Key.Key_C,
     }
     
     # Mappa inversa dalle azioni ai tasti standard
@@ -52,7 +51,6 @@ class KeyMapper:
         'quick_search': Qt.Key.Key_F,
         'reorder_mode': Qt.Key.Key_R,
         'settings': Qt.Key.Key_S,
-        'change_category': Qt.Key.Key_C,
     }
     
     @staticmethod
@@ -84,7 +82,6 @@ class KeyMapper:
         'quick_search': 'Quick Search',
         'reorder_mode': 'Reorder Mode',
         'settings': 'Settings Menu',
-        'change_category': 'Change Category',
     }
     
     def __init__(self, config_file='key_mappings.json'):
@@ -909,7 +906,6 @@ class KeyRemapperDialog(QDialog):
                 ('quick_search', 'Quick Search'),
                 ('reorder_mode', 'Reorder Mode'),
                 ('settings', 'Settings Menu'),
-                ('change_category', 'Change Category'),
             ]),
         ]
         
@@ -1024,7 +1020,6 @@ class KeyRemapperDialog(QDialog):
             'quick_search': 'Find apps quickly',
             'reorder_mode': 'Rearrange apps',
             'settings': 'Open settings panel',
-            'change_category': 'Quick category change',
         }
         
         hint_label = QLabel(hint_texts.get(action_id, ''))

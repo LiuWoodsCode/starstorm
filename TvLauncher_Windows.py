@@ -30,13 +30,6 @@ from modules.key_remapper import KeyMapper
 from modules.tile_effects import TileGlowEffect
 from modules.joystick_manager import JoystickManager
 from modules.volume_overlay import install_volume_control
-from modules.category_manager import (
-    integrate_categories, 
-    add_category_navigation_to_keypressevent,
-    add_category_to_edit_dialog,
-    add_quick_category_shortcut,  
-    add_category_joystick_support 
-)
 from modules.background_manager import BackgroundManager
 from modules.update_notification import check_for_updates
 from modules.weather_widget import (
@@ -474,9 +467,6 @@ class TVLauncher(QMainWindow):
         self.build_infinite_carousel()
         integrate_reorder_mode(self)
         self.settings_menu = SettingsMenu(self.scaling, self)
-        integrate_categories(self)
-        add_quick_category_shortcut(self)
-        add_category_joystick_support(self)
         
         self.window_manager = WindowManager(self)
         screen = QApplication.primaryScreen().geometry()
@@ -932,7 +922,6 @@ class TVLauncher(QMainWindow):
                 'name': str(app.get('name', '')),
                 'path': str(app.get('path', '')),
                 'icon': str(app.get('icon', '')),
-                'category': str(app.get('category', 'Other'))
             }
             if not isinstance(clean_app['icon'], str):
                 clean_app['icon'] = clean_app['path']
@@ -960,9 +949,6 @@ class TVLauncher(QMainWindow):
             config_data['auto_change_wallpaper'] = self.config_data.get('auto_change_wallpaper', False)
             config_data['wallpaper_interval'] = self.config_data.get('wallpaper_interval', 180000)
         
-        if hasattr(self, 'category_manager'):
-            config_data = self.category_manager.save_categories(config_data)
-        
         with open(self.config_file, 'w') as f:
             json.dump(config_data, f, indent=2)
     
@@ -986,10 +972,6 @@ class TVLauncher(QMainWindow):
                     if hasattr(widget, '_refresh_toggle'):
                         widget._refresh_toggle()
    
-    def _on_category_changed(self, category_index):
-        self.current_index = 0
-        self.build_infinite_carousel()
-
     def set_api_key(self):
         dialog = ApiKeyDialog(self.steamgriddb_api_key, self, scaling=self.scaling)
         if dialog.exec() == QDialog.DialogCode.Accepted:
@@ -1494,7 +1476,6 @@ class TVLauncher(QMainWindow):
             'name': app_data.get('name', ''),
             'path': app_data.get('path', ''),
             'icon': app_data.get('icon', ''),
-            'category': self.category_manager.get_default_category()
         }
         if isinstance(clean_app_data['icon'], QPixmap):
             clean_app_data['icon'] = app_data.get('path', '')
@@ -1539,9 +1520,6 @@ class TVLauncher(QMainWindow):
         if dialog.exec() == QDialog.DialogCode.Accepted:
             app_data = dialog.get_app_data()
             if app_data['name'] and app_data['path']:
-                if not app_data.get('category'):
-                    app_data['category'] = self.category_manager.get_default_category()
-                
                 if (not app_data['icon'] or app_data['icon'] == app_data['path']) and self.image_manager.api_key and REQUESTS_AVAILABLE:
                     print(f"Searching image for: {app_data['name']}")
                     image_result = self.image_manager.get_app_image(app_data['name'], app_data['path'])
@@ -1626,8 +1604,6 @@ class TVLauncher(QMainWindow):
         self.activateWindow()
 
     def keyPressEvent(self, event: QKeyEvent):
-        if add_category_navigation_to_keypressevent(self, event):
-            return
         if hasattr(self, 'settings_menu') and self.settings_menu.is_open:
             self.settings_menu.keyPressEvent(event)
             return
