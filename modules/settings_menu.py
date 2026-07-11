@@ -1216,7 +1216,7 @@ class SettingsMenu(QWidget):
         version_label.setStyleSheet(f"color: white; font-size: {self.scaling.scale_font(13)}px;")
         info_layout.addWidget(version_label)
   
-        author_label = QLabel("Made with ❤️ by Darkvinx88")
+        author_label = QLabel("Made with ❤️ by LiuWoodsCode")
         author_label.setStyleSheet(f"color: #aaa; font-size: {self.scaling.scale_font(12)}px;")
         info_layout.addWidget(author_label)
         

@@ -89,6 +89,7 @@ class _UpdateCheckWorker(QThread):
         self.current_version = current_version
 
     def run(self):
+        raise Exception("Disabled")
         try:
             req = urllib.request.Request(
                 RELEASES_API,
