@@ -794,8 +794,8 @@ class TVLauncher(QMainWindow):
         # ``carousel_container`` name so integrations can continue to target
         # the app area without knowing about this implementation detail.
         self.grid_columns = 6
-        # Keep the gap compact so the tiles use the available screen area.
-        self.tile_spacing = max(2, self.scaling.scale(4))
+        # Keep tiles very tightly packed in both directions.
+        self.tile_spacing = max(1, self.scaling.scale(1))
         self.grid_margin = self.scaling.scale(0)
         self._configure_grid_dimensions()
         self.carousel_container = QScrollArea()
@@ -914,12 +914,12 @@ class TVLauncher(QMainWindow):
             // self.grid_columns,
         )
 
-        # Focused tiles fill their grid cells; unfocused tiles retain a subtle
-        # scale-down effect without changing the number of columns.
+        # Focused tiles fill their grid cells. Unfocused tiles stay nearly the
+        # same size so neighboring items remain visually packed together.
         self.focused_width = tile_width
         self.focused_height = max(1, round(tile_width * 288 / 400))
-        self.normal_width = max(1, round(tile_width * 360 / 400))
-        self.normal_height = max(1, round(self.normal_width * 260 / 360))
+        self.normal_width = max(1, round(tile_width * 0.98))
+        self.normal_height = max(1, round(self.focused_height * 0.98))
         self.grid_content_width = (
             self.grid_columns * self.focused_width
             + (self.grid_columns - 1) * self.tile_spacing
