@@ -19,6 +19,16 @@
       "name": "Item4",
       "path": "Item4",
       "icon": ""
+    },
+    {
+      "name": "Item5",
+      "path": "Item5",
+      "icon": ""
+    },
+    {
+      "name": "Item6",
+      "path": "Item6",
+      "icon": ""
     }
   ],
   "steamgriddb_api_key": "",
