@@ -251,7 +251,7 @@ class CoverDownloadWorker(QThread):
 
 
 class AppTile(QWidget):
-    def __init__(self, app_data, scaling, parent=None):
+    def __init__(self, app_data, scaling, parent=None, tile_dimensions=None):
         super().__init__(parent)
         self.app_data = app_data
         self.scaling = scaling
@@ -260,14 +260,21 @@ class AppTile(QWidget):
         self._normal_pixmap = None
         self._focused_pixmap = None
         
-        self.normal_width = self.scaling.scale(360)
-        self.normal_height = self.scaling.scale(260)
-        self.focused_width = self.scaling.scale(400)
-        self.focused_height = self.scaling.scale(288)
-        self.normal_img_width = self.scaling.scale(360)
-        self.normal_img_height = self.scaling.scale(203)
-        self.focused_img_width = self.scaling.scale(400)
-        self.focused_img_height = self.scaling.scale(225)
+        if tile_dimensions is None:
+            self.normal_width = self.scaling.scale(360)
+            self.normal_height = self.scaling.scale(260)
+            self.focused_width = self.scaling.scale(400)
+            self.focused_height = self.scaling.scale(288)
+        else:
+            (
+                self.normal_width, self.normal_height,
+                self.focused_width, self.focused_height,
+            ) = tile_dimensions
+
+        self.normal_img_width = self.normal_width
+        self.normal_img_height = max(1, round(self.normal_width * 9 / 16))
+        self.focused_img_width = self.focused_width
+        self.focused_img_height = max(1, round(self.focused_width * 9 / 16))
         self.border_radius = self.scaling.scale(24)
         
         self.setFixedSize(self.normal_width, self.normal_height)
@@ -787,20 +794,17 @@ class TVLauncher(QMainWindow):
         # ``carousel_container`` name so integrations can continue to target
         # the app area without knowing about this implementation detail.
         self.grid_columns = 6
-        self.tile_spacing = self.scaling.scale(8)
+        # Keep the gap compact so the tiles use the available screen area.
+        self.tile_spacing = max(2, self.scaling.scale(4))
         self.grid_margin = self.scaling.scale(0)
-        self.grid_content_width = (
-            self.grid_columns * self.focused_width
-            + (self.grid_columns - 1) * self.tile_spacing
-            + 2 * self.grid_margin
-        )
+        self._configure_grid_dimensions()
         self.carousel_container = QScrollArea()
         self.carousel_container.setFixedHeight(self.scaling.scale(620))
         # Alignment in the parent layout prevents a QScrollArea from expanding
         # to its content size automatically.  Give it an explicit viewport
         # width so all grid columns are visible rather than clipped to a sliver.
         self.carousel_container.setFixedWidth(
-            self.grid_content_width + self.scaling.scale(24)
+            self.grid_content_width + self.scaling.scale(18)
         )
         self.carousel_container.setFrameShape(QFrame.Shape.NoFrame)
         self.carousel_container.setWidgetResizable(False)
@@ -896,6 +900,31 @@ class TVLauncher(QMainWindow):
         main_layout.addSpacing(8)
         self.showFullScreen()
         self.mouse_touch = integrate_mouse_touch(self)
+
+    def _configure_grid_dimensions(self):
+        """Calculate tile dimensions from the available screen width."""
+        screen_width = self.width() or QApplication.primaryScreen().geometry().width()
+        available_width = max(
+            self.scaling.scale(600),
+            screen_width - 2 * self.scaling.scale(24),
+        )
+        tile_width = max(
+            self.scaling.scale(120),
+            (available_width - (self.grid_columns - 1) * self.tile_spacing)
+            // self.grid_columns,
+        )
+
+        # Focused tiles fill their grid cells; unfocused tiles retain a subtle
+        # scale-down effect without changing the number of columns.
+        self.focused_width = tile_width
+        self.focused_height = max(1, round(tile_width * 288 / 400))
+        self.normal_width = max(1, round(tile_width * 360 / 400))
+        self.normal_height = max(1, round(self.normal_width * 260 / 360))
+        self.grid_content_width = (
+            self.grid_columns * self.focused_width
+            + (self.grid_columns - 1) * self.tile_spacing
+            + 2 * self.grid_margin
+        )
    
     def load_config(self):
         if self.config_file.exists():
@@ -1378,7 +1407,17 @@ class TVLauncher(QMainWindow):
             self.app_grid_layout.setColumnMinimumWidth(column, self.focused_width)
 
         for index, app in enumerate(self.apps):
-            tile = AppTile(app, self.scaling, self.app_grid_content)
+            tile = AppTile(
+                app,
+                self.scaling,
+                self.app_grid_content,
+                tile_dimensions=(
+                    self.normal_width,
+                    self.normal_height,
+                    self.focused_width,
+                    self.focused_height,
+                ),
+            )
             tile.app_index = index
             tile.set_focused(index == self.current_index)
             row, column = divmod(index, self.grid_columns)
